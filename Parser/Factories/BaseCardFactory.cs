@@ -8,6 +8,6 @@ namespace Parser.Factories
 {
     abstract class BaseCardFactory<T>
     {
-        public abstract T createCard(string htmlCode);
+        public abstract Task<T> createCard(string htmlCode);
     }
 }

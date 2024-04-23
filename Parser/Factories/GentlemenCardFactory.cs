@@ -9,10 +9,10 @@ namespace Parser.Factories
 {
     internal class GentlemenCardFactory : BaseCardFactory<GentlemenCard>
     {
-        public override GentlemenCard createCard(string htmlCode)
+        public override async Task<GentlemenCard> createCard(string htmlCode)
         {
             GentlemenCard card = new GentlemenCard(htmlCode);
-            card.parse();
+            await card.parse();
 
             return card;
         }

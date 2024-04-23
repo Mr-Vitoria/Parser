@@ -2,15 +2,12 @@
 //Название + ссылка на картинку + описание товара
 //Записать полученные данные в таблицу Excel
 
-//using System.Net;
-
-//using ClosedXML.Excel;
-
 using Parser;
 using Parser.Factories;
 using Parser.Models;
+using Parser.Parsers;
 
-HTMLParser<GentlemenCard> parser = new HTMLParser<GentlemenCard>(
+GentlemenHTMLParser parser = new GentlemenHTMLParser(
     "https://www.gentlemens.kz/", 
     "js-product"
     );
