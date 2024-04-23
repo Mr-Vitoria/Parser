@@ -4,11 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Parser
+namespace Parser.Factories
 {
-    internal class Test
+    abstract class BaseCardFactory<T>
     {
-        public string ClassName { get; set; }
-        public string Value { get; set; }
+        public abstract T createCard(string htmlCode);
     }
 }

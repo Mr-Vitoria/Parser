@@ -1,4 +1,6 @@
-﻿using PuppeteerSharp;
+﻿using Parser.Factories;
+using Parser.Models;
+using PuppeteerSharp;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,37 +9,30 @@ using System.Threading.Tasks;
 
 namespace Parser
 {
-    internal class HTMLParser
+    internal class HTMLParser<T>
     {
         private readonly string baseUrl;
-        private string classNameModel;
-        
-        public HTMLParser(string baseUrl, string classNameModel)
+        private string classNameCard;
+
+        public HTMLParser(string baseUrl, string classNameCard)
         {
             this.baseUrl = baseUrl;
-            this.classNameModel = classNameModel;
+            this.classNameCard = classNameCard;
         }
 
-        public async Task<List<GentlemenCard>> parse()
+        public async Task<List<T>> parse(BaseCardFactory<T> cardFactory)
         {
-            List<GentlemenCard> parsedData = new List<GentlemenCard>();
+            List<T> parsedCards = new List<T>();
 
             string htmlCode = await getHtmlCode(baseUrl);
 
-                StringBuilder parsedCode = new StringBuilder(htmlCode);
-
-                List<string> classes = htmlCode.Split($"class=\"{classNameModel} ").ToList();
-            for (int i = 1; i < classes.Count; i++)
+            IEnumerable<string> htmlCards = htmlCode.Split($"class=\"{classNameCard} ");
+            for (int i = 1; i < htmlCards.Count(); i++)
             {
-                GentlemenCard card = new GentlemenCard(classes[i]);
-                card.parse();
-
-                parsedData.Add(
-                    card    
-                    );
+                parsedCards.Add(cardFactory.createCard(htmlCards.ElementAt(i)));
             }
 
-            return parsedData;
+            return parsedCards;
         }
 
         private async Task<string> getHtmlCode(string url)
@@ -52,10 +47,9 @@ namespace Parser
             {
                 await page.GoToAsync(url);
 
-                // Wait for the page to finish loading and the JavaScript code to execute
+                //TODO - дождаться полной загрузки страницы, вместо 5 секунд
                 Thread.Sleep(5000);
 
-                // Scrape the page content
                 string content = await page.GetContentAsync();
                 return content;
             }

@@ -7,10 +7,13 @@
 //using ClosedXML.Excel;
 
 using Parser;
+using Parser.Factories;
+using Parser.Models;
 
-HTMLParser parser = new HTMLParser("https://www.gentlemens.kz/", 
+HTMLParser<GentlemenCard> parser = new HTMLParser<GentlemenCard>(
+    "https://www.gentlemens.kz/", 
     "js-product"
     );
-List<GentlemenCard> gentlemenCards = await parser.parse();
+List<GentlemenCard> gentlemenCards = await parser.parse(new GentlemenCardFactory());
 
 new ExcelWriter().writeGentlemenCard(gentlemenCards);

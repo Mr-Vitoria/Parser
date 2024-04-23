@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Parser
+namespace Parser.Models
 {
     internal class GentlemenCard
     {
@@ -14,14 +14,15 @@ namespace Parser
         public string Description { get; set; }
         public string ImgUrl { get; set; }
 
-        public GentlemenCard(string htmlCard) { 
+        public GentlemenCard(string htmlCard)
+        {
             this.htmlCard = htmlCard;
         }
 
         public bool parse()
         {
             ImgUrl = string.Concat(htmlCard.Substring(
-                htmlCard.IndexOf("data-original=\"") + 15 
+                htmlCard.IndexOf("data-original=\"") + 15
                 ).TakeWhile(ch => ch != '\"'));
 
             Title = string.Concat(htmlCard.Substring(
