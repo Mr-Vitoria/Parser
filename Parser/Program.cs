@@ -4,17 +4,13 @@
 
 //using System.Net;
 
+//using ClosedXML.Excel;
 
 using Parser;
 
 HTMLParser parser = new HTMLParser("https://www.gentlemens.kz/", 
     "js-product"
     );
-await parser.parse();
+List<GentlemenCard> gentlemenCards = await parser.parse();
 
-//using ClosedXML.Excel;
-
-//var workbook = new XLWorkbook();
-//var worksheet = workbook.Worksheets.Add("Sample Sheet");
-//worksheet.Cell("A1").Value = "Hello World!";
-//workbook.SaveAs("HelloWorld.xlsx");
+new ExcelWriter().writeGentlemenCard(gentlemenCards);
