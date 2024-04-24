@@ -12,7 +12,7 @@ namespace Parser.Factories
         public override async Task<GentlemenCard> createCard(string htmlCode)
         {
             GentlemenCard card = new GentlemenCard(htmlCode);
-            await card.parse();
+            await card.parseFullData();
 
             return card;
         }

@@ -7,10 +7,10 @@ using Parser.Factories;
 using Parser.Models;
 using Parser.Parsers;
 
-GentlemenHTMLParser parser = new GentlemenHTMLParser(
+GentlemenListHTMLParser parser = new GentlemenListHTMLParser(
     "https://www.gentlemens.kz/", 
     "js-product"
     );
-List<GentlemenCard> gentlemenCards = await parser.parse(new GentlemenCardFactory());
+List<GentlemenCard> gentlemenCards = await parser.parse();
 
 new ExcelWriter().writeGentlemenCard(gentlemenCards);

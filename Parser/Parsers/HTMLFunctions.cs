@@ -22,7 +22,9 @@ namespace Parser.Parsers
                 await page.GoToAsync(url);
 
                 //TODO - дождаться полной загрузки страницы, вместо 5 секунд
-                Thread.Sleep(5000);
+                await page.WaitForDevicePromptAsync();
+                await page.WaitForFunctionAsync("t776__showMore", 628671399);
+
 
                 string content = await page.GetContentAsync();
                 return content;

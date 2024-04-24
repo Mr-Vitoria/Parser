@@ -15,13 +15,16 @@ namespace Parser.Models
         public string Title { get; set; }
         public string Description { get; set; }
         public string ImgUrl { get; set; }
+        public string HrefToFullCard { get; set; }
 
         public GentlemenCard(string htmlCard)
         {
             this.htmlCard = htmlCard;
+
+            parseBaseData();
         }
 
-        public async Task<bool> parse()
+        public void parseBaseData()
         {
             ImgUrl = string.Concat(
                 htmlCard.Substring(htmlCard.IndexOf("data-original=\""))
@@ -39,13 +42,16 @@ namespace Parser.Models
 
             Description = "";
 
-            string hrefToFullCard = string.Concat(
+            HrefToFullCard = string.Concat(
                 htmlCard.Substring(htmlCard.IndexOf("href=\""))
                     .Skip(6)
                     .TakeWhile(ch => ch != '\"')
                 );
+        }
 
-            string htmlCode = await HTMLFunctions.getHtmlCode(hrefToFullCard);
+        public async Task<bool> parseFullData()
+        {
+            string htmlCode = await new GentlemenDetailHTMLParser(HrefToFullCard,"").getPageContent();
 
             Description = string.Concat(
                 htmlCode.Substring(htmlCode.IndexOf("js-store-prod-all-text"))
