@@ -22,15 +22,24 @@ namespace Parser.Parsers
         public override async Task<List<GentlemenCard>> parse()
         {
             GentlemenCardFactory cardFactory = new GentlemenCardFactory();
-
             List<GentlemenCard> parsedCards = new List<GentlemenCard>();
 
+            LogWriter.WriteInfo("Получение страницы товаров", ConsoleColor.Green);
+
             string htmlCode = await getPageContent();
+            LogWriter.WriteInfo("Закончено", ConsoleColor.Green);
+
             IEnumerable<string> htmlCards = htmlCode.Split($"class=\"{classNameCard} ");
             for (int i = 1; i < htmlCards.Count(); i++)
             {
-                parsedCards.Add(await cardFactory.createCard(htmlCards.ElementAt(i)));
+                LogWriter.WriteInfo($"Выгрузка {i} товара");
+
+                GentlemenCard card = await cardFactory.createCard(htmlCards.ElementAt(i));
+                parsedCards.Add(card);
+                
+                LogWriter.WriteInfo($"Товар {card.Title} выгружен");
             }
+
             return parsedCards;
         }
 
