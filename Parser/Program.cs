@@ -31,6 +31,6 @@ JDentalListParser parser = new JDentalListParser();
 
 LogWriter.WriteInfo("Парсинг страницы начат", ConsoleColor.Red);
 
-JDentalImplantContainer implantContainer = await parser.parseJDIconImplant();
+List<JDentalImplantContainer> implantContainers = await parser.getImplantContainers();
 
 LogWriter.WriteInfo("Парсинг страницы завершен", ConsoleColor.Green);

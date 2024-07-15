@@ -13,11 +13,19 @@ namespace Parser.Parsers.JDental
 {
     internal class JDentalListParser
     {
-        public async Task<JDentalImplantContainer> parseJDIconImplant()
+        private const string BASE_URL_JDICON = "https://jdentalcare.ru/jdicon";
+        private const string BASE_URL_JDICON_PLUS = "https://jdentalcare.ru/jdicon-plus";
+        private const string BASE_URL_JDICON_ULTRA_S = "https://jdentalcare.ru/jdicon-ultra-s";
+        private const string BASE_URL_JDNASAL = "https://jdentalcare.ru/jdnasal";
+        private const string BASE_URL_JDPTERYGO = "https://jdentalcare.ru/jdpterygo";
+        private const string BASE_URL_JDEVOLUTION_PLUS = "https://jdentalcare.ru/jdevolution-plus";
+        private const string BASE_URL_JDZYGOMA = "https://jdentalcare.ru/jdzygoma";
+
+        public async Task<JDentalImplantContainer> parseImplant(string baseUrl, string title)
         {
             JDentalImplantFactory cardFactory = new JDentalImplantFactory();
             JDentalImplantContainer parsedContainer = new JDentalImplantContainer();
-            parsedContainer.Title = "JDIcon";
+            parsedContainer.Title = title;
 
             LogWriter.WriteInfo($"Получение страницы товаров для {parsedContainer.Title}", ConsoleColor.Green);
 
@@ -25,7 +33,7 @@ namespace Parser.Parsers.JDental
             List<string> htmlCards = new List<string>();
             while (true)
             {
-                string htmlCode = await getPageContent("https://jdentalcare.ru/jdicon/page/"+page);
+                string htmlCode = await getPageContent(baseUrl + "/page/"+page);
                 if (htmlCode.Contains("error-404"))
                 {
                     break;
@@ -53,6 +61,19 @@ namespace Parser.Parsers.JDental
             return parsedContainer;
         }
 
+        public async Task<List<JDentalImplantContainer>> getImplantContainers()
+        {
+            List<JDentalImplantContainer> containers = new List<JDentalImplantContainer>();
+            containers.Add( await parseImplant(BASE_URL_JDICON, "JDIcon"));
+            containers.Add( await parseImplant(BASE_URL_JDICON_PLUS, "JDIcon Plus"));
+            containers.Add( await parseImplant(BASE_URL_JDICON_ULTRA_S, "JDIcon Ultra S"));
+            containers.Add( await parseImplant(BASE_URL_JDNASAL, "JDNasal"));
+            containers.Add( await parseImplant(BASE_URL_JDPTERYGO, "JDPterygo"));
+            containers.Add( await parseImplant(BASE_URL_JDEVOLUTION_PLUS, "JDEvolution Plus"));
+            containers.Add( await parseImplant(BASE_URL_JDZYGOMA, "JDZygoma"));
+
+            return containers;
+        }
 
         public async Task<string> getPageContent(string pageHref)
         {
