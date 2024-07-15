@@ -75,6 +75,46 @@ namespace Parser.Parsers.JDental
             return containers;
         }
 
+        public async Task<List<JDentalCollectionCard>> parseCollections()
+        {
+            JDentalCollectionFactory cardFactory = new JDentalCollectionFactory();
+            List<JDentalCollectionCard> parsedCollections = new List<JDentalCollectionCard>();
+
+            LogWriter.WriteInfo($"Получение страницы товаров для инструментов и наборов", ConsoleColor.Green);
+
+            int page = 1;
+            List<string> htmlCards = new List<string>();
+            while (true)
+            {
+                string htmlCode = await getPageContent("https://jdentalcare.ru/instrumenty-i-nabory/page/" + page);
+                if (htmlCode.Contains("error-404"))
+                {
+                    break;
+                }
+                List<string> htmlCardTemplate = new List<string>(htmlCode.Split($"class=\"wrap-prod prod-block"));
+                htmlCardTemplate.RemoveAt(0);
+                string htmlCard = htmlCardTemplate[htmlCardTemplate.Count - 1];
+                htmlCardTemplate[htmlCardTemplate.Count - 1] = htmlCard.Substring(0, htmlCard.IndexOf("<footer"));
+
+                htmlCards.AddRange(htmlCardTemplate);
+                page += 1;
+            }
+            LogWriter.WriteInfo("Закончено", ConsoleColor.Green);
+
+            for (int i = 1; i < htmlCards.Count(); i++)
+            {
+                LogWriter.WriteInfo($"Выгрузка {i} товара");
+
+                JDentalCollectionCard card = await cardFactory.createCard(htmlCards.ElementAt(i));
+                parsedCollections.Add(card);
+
+                LogWriter.WriteInfo($"Товар {card.Title} выгружен");
+            }
+
+            return parsedCollections;
+        }
+
+
         public async Task<string> getPageContent(string pageHref)
         {
             var options = new LaunchOptions
