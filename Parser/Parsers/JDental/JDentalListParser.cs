@@ -44,7 +44,10 @@ namespace Parser.Parsers.JDental
         private const string BASE_URL_TRANSFERS = "https://jdentalcare.ru/transfery";
 
         // Мульти - Юниты
-        private const string BASE_URL_MULTI_UNITS = "https://jdentalcare.ru/multi-junity/";
+        private const string BASE_URL_MULTI_UNITS = "https://jdentalcare.ru/multi-junity";
+
+        // Винты
+        private const string BASE_URL_SCREWS = "https://jdentalcare.ru/vinty";
 
 
         public async Task<JDentalBaseContainer> parseBaseCards(string baseUrl, string title)
@@ -109,6 +112,13 @@ namespace Parser.Parsers.JDental
         public async Task<JDentalBaseContainer> getShapers()
         {
             JDentalBaseContainer container = await parseBaseCards(BASE_URL_SHAPERS, "Формирователи");
+
+            return container;
+        }
+
+        public async Task<JDentalBaseContainer> getScrews()
+        {
+            JDentalBaseContainer container = await parseBaseCards(BASE_URL_SCREWS, "Винты");
 
             return container;
         }
