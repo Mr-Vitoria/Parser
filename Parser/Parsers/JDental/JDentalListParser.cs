@@ -13,7 +13,7 @@ namespace Parser.Parsers.JDental
 {
     internal class JDentalListParser
     {
-        // Implants
+        // Импланты
         private const string BASE_URL_JDICON = "https://jdentalcare.ru/jdicon";
         private const string BASE_URL_JDICON_PLUS = "https://jdentalcare.ru/jdicon-plus";
         private const string BASE_URL_JDICON_ULTRA_S = "https://jdentalcare.ru/jdicon-ultra-s";
@@ -22,20 +22,26 @@ namespace Parser.Parsers.JDental
         private const string BASE_URL_JDEVOLUTION_PLUS = "https://jdentalcare.ru/jdevolution-plus";
         private const string BASE_URL_JDZYGOMA = "https://jdentalcare.ru/jdzygoma";
 
-        // Abatments
+        // Абатменты
         private const string BASE_URL_TEMP_ABATMENT = "https://jdentalcare.ru/vremennye-abatmenty";
         private const string BASE_URL_STANDART_ABATMENT = "https://jdentalcare.ru/standartnye-abatmenty";
         private const string BASE_URL_SPHERE_ABATMENT = "https://jdentalcare.ru/sharovidnye-abatmenty";
         private const string BASE_URL_EMI_ABATMENT = "https://jdentalcare.ru/emi-abatmenty";
         private const string BASE_URL_OCTA_ABATMENT = "https://jdentalcare.ru/octa-abatmenty";
 
-        // OrthipedicComponents
+        // Ортопедические компоненты
         private const string BASE_URL_HEALING_CAPS = "https://jdentalcare.ru/zazhivlyajushhie-kolpachki";
         private const string BASE_URL_SCREW_FIXING = "https://jdentalcare.ru/dlya-vintovoj-fiksacii";
         private const string BASE_URL_REMOVABLE_PROSTHETICS = "https://jdentalcare.ru/dlya-semnogo-protezirovaniya";
 
-        // Analog
-        private const string BASE_URL_ANALOG = "https://jdentalcare.ru/analogi/";
+        // Аналоги
+        private const string BASE_URL_ANALOG = "https://jdentalcare.ru/analogi";
+
+        // Формирователи
+        private const string BASE_URL_SHAPERS = "https://jdentalcare.ru/formirovateli";
+
+        // Трансферы
+        private const string BASE_URL_TRANSFERS = "https://jdentalcare.ru/transfery";
 
 
         public async Task<JDentalBaseContainer> parseBaseCards(string baseUrl, string title)
@@ -93,6 +99,20 @@ namespace Parser.Parsers.JDental
         public async Task<JDentalBaseContainer> getAnalogs()
         {
             JDentalBaseContainer container = await parseBaseCards(BASE_URL_ANALOG, "Аналоги");
+
+            return container;
+        }
+
+        public async Task<JDentalBaseContainer> getShapers()
+        {
+            JDentalBaseContainer container = await parseBaseCards(BASE_URL_SHAPERS, "Формирователи");
+
+            return container;
+        }
+
+        public async Task<JDentalBaseContainer> getTransfers()
+        {
+            JDentalBaseContainer container = await parseBaseCards(BASE_URL_TRANSFERS, "Трансферы");
 
             return container;
         }

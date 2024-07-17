@@ -24,6 +24,7 @@ namespace Parser.Parsers.JDental.Models
         public float OrthopedSize { get; set; } //Размер ортопедической отвертки
         public string ImpressionLevel { get; set; } //Уровень снятия оттиска
         public string ApplicationMethod { get; set; } //Метод применения
+        public string Indications { get; set; } //Показания
 
 
         private string htmlCard;
@@ -105,6 +106,8 @@ namespace Parser.Parsers.JDental.Models
             ImpressionLevel = getStringValue(htmlCode, "Уровень снятия оттиска");
 
             ApplicationMethod = getStringValue(htmlCode, "Метод применения");
+
+            Indications = getStringValue(htmlCode, "Показания");
 
             return true;
         }
