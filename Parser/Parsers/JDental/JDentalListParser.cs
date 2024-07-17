@@ -29,11 +29,16 @@ namespace Parser.Parsers.JDental
         private const string BASE_URL_EMI_ABATMENT = "https://jdentalcare.ru/emi-abatmenty";
         private const string BASE_URL_OCTA_ABATMENT = "https://jdentalcare.ru/octa-abatmenty";
 
+        // OrthipedicComponents
+        private const string BASE_URL_HEALING_CAPS = "https://jdentalcare.ru/zazhivlyajushhie-kolpachki";
+        private const string BASE_URL_SCREW_FIXING = "https://jdentalcare.ru/dlya-vintovoj-fiksacii";
+        private const string BASE_URL_REMOVABLE_PROSTHETICS = "https://jdentalcare.ru/dlya-semnogo-protezirovaniya";
 
-        public async Task<JDentalAbatmentContainer> parseAbatment(string baseUrl, string title)
+
+        public async Task<JDentalBaseContainer> parseBaseCards(string baseUrl, string title)
         {
-            JDentalAbatmentFactory cardFactory = new JDentalAbatmentFactory();
-            JDentalAbatmentContainer parsedContainer = new JDentalAbatmentContainer();
+            JDentalBaseFactory cardFactory = new JDentalBaseFactory();
+            JDentalBaseContainer parsedContainer = new JDentalBaseContainer();
             parsedContainer.Title = title;
 
             LogWriter.WriteInfo($"Получение страницы товаров для {parsedContainer.Title}", ConsoleColor.Green);
@@ -61,8 +66,8 @@ namespace Parser.Parsers.JDental
             {
                 LogWriter.WriteInfo($"Выгрузка {i} товара");
 
-                JDentalImplantCard card = await cardFactory.createCard(htmlCards.ElementAt(i));
-                parsedContainer.implantCards.Add(card);
+                JDentalBaseCard card = await cardFactory.createCard(htmlCards.ElementAt(i));
+                parsedContainer.cards.Add(card);
 
                 LogWriter.WriteInfo($"Товар {card.Title} выгружен");
             }
@@ -70,14 +75,24 @@ namespace Parser.Parsers.JDental
             return parsedContainer;
         }
 
-        public async Task<List<JDentalAbatmentContainer>> getAbatmentContainers()
+        public async Task<List<JDentalBaseContainer>> getAbatments()
         {
-            List<JDentalAbatmentContainer> containers = new List<JDentalAbatmentContainer>();
-            containers.Add(await parseAbatment(BASE_URL_TEMP_ABATMENT, "Временные абатменты"));
-            containers.Add(await parseAbatment(BASE_URL_STANDART_ABATMENT, "Стандартные абатменты"));
-            containers.Add(await parseAbatment(BASE_URL_SPHERE_ABATMENT, "Шаровидные абатменты"));
-            containers.Add(await parseAbatment(BASE_URL_EMI_ABATMENT, "Emi абатменты"));
-            containers.Add(await parseAbatment(BASE_URL_OCTA_ABATMENT, "Octa абатменты"));
+            List<JDentalBaseContainer> containers = new List<JDentalBaseContainer>();
+            containers.Add(await parseBaseCards(BASE_URL_TEMP_ABATMENT, "Временные абатменты"));
+            containers.Add(await parseBaseCards(BASE_URL_STANDART_ABATMENT, "Стандартные абатменты"));
+            containers.Add(await parseBaseCards(BASE_URL_SPHERE_ABATMENT, "Шаровидные абатменты"));
+            containers.Add(await parseBaseCards(BASE_URL_EMI_ABATMENT, "Emi абатменты"));
+            containers.Add(await parseBaseCards(BASE_URL_OCTA_ABATMENT, "Octa абатменты"));
+
+            return containers;
+        }
+
+        public async Task<List<JDentalBaseContainer>> getOrthipedicComponents()
+        {
+            List<JDentalBaseContainer> containers = new List<JDentalBaseContainer>();
+            containers.Add(await parseBaseCards(BASE_URL_HEALING_CAPS, "Заживляющие колпачки"));
+            containers.Add(await parseBaseCards(BASE_URL_SCREW_FIXING, "Для винтовой фиксации"));
+            containers.Add(await parseBaseCards(BASE_URL_REMOVABLE_PROSTHETICS, "Для съемного протезирования"));
 
             return containers;
         }
@@ -122,7 +137,7 @@ namespace Parser.Parsers.JDental
             return parsedContainer;
         }
 
-        public async Task<List<JDentalImplantContainer>> getImplantContainers()
+        public async Task<List<JDentalImplantContainer>> getImplants()
         {
             List<JDentalImplantContainer> containers = new List<JDentalImplantContainer>();
             containers.Add( await parseImplant(BASE_URL_JDICON, "JDIcon"));

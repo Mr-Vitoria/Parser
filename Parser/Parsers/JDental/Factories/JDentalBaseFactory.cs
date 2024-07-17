@@ -8,11 +8,11 @@ using System.Threading.Tasks;
 
 namespace Parser.Parsers.JDental.Factories
 {
-    internal class JDentalAbatmentFactory
+    internal class JDentalBaseFactory
     {
-        public async Task<JDentalAbatmentCard> createCard(string htmlCode)
+        public async Task<JDentalBaseCard> createCard(string htmlCode)
         {
-            JDentalAbatmentCard card = new JDentalAbatmentCard(htmlCode);
+            JDentalBaseCard card = new JDentalBaseCard(htmlCode);
             await card.parseFullData();
 
             return card;

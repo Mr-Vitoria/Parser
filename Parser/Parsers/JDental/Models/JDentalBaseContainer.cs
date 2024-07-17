@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace Parser.Parsers.JDental.Models
 {
-    internal class JDentalAbatmentContainer
+    internal class JDentalBaseContainer
     {
         public string Title { get; set; }
-        public List<JDentalAbatmentCard> abatmentCards { get; set; } = new List<JDentalAbatmentCard>();
+        public List<JDentalBaseCard> cards { get; set; } = new List<JDentalBaseCard>();
     }
 }

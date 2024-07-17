@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Parser.Parsers.JDental.Models
 {
-    internal class JDentalAbatmentCard
+    internal class JDentalBaseCard
     {
         public string Articul { get; set; }
         public string Title { get; set; }
@@ -29,7 +29,7 @@ namespace Parser.Parsers.JDental.Models
         private string htmlCard;
         private string fullHref;
 
-        public JDentalAbatmentCard(string htmlCard)
+        public JDentalBaseCard(string htmlCard)
         {
             this.htmlCard = htmlCard;
 
@@ -84,85 +84,62 @@ namespace Parser.Parsers.JDental.Models
             htmlCode = htmlCode.Substring(htmlCode.IndexOf("list-options"));
             htmlCode = htmlCode.Substring(0, htmlCode.IndexOf("</div>"));
 
-            LineImplant = string.Concat(
-                htmlCode.Substring(htmlCode.IndexOf("Линейка имплантатов"))
-                    .SkipWhile(ch => ch != 'v')
-                    .Skip(7)
-                    .TakeWhile(ch => ch != '<')
-                );
+            LineImplant = getStringValue(htmlCode, "Линейка имплантатов");
 
-            Connection = string.Concat(
-                htmlCode.Substring(htmlCode.IndexOf("Соединение"))
-                    .SkipWhile(ch => ch != 'v')
-                    .Skip(7)
-                    .TakeWhile(ch => ch != '<')
-                );
+            Connection = getStringValue(htmlCode, "Соединение");
 
-            float diametr = 0.0f;
-            float.TryParse(string.Concat(
-                htmlCode.Substring(htmlCode.IndexOf("Диаметр, мм"))
-                    .SkipWhile(ch => ch != 'v')
-                    .Skip(7)
-                    .TakeWhile(ch => ch != '<')
-                ).Replace(".", ","), out diametr);
-            Diametr = diametr;
+            Diametr = getFloatValue(htmlCode, "Диаметр, мм");
 
-            float heightGum = 0.0f;
-            int heightGumIndex = htmlCode.IndexOf("Высота десны, мм");
-            if (heightGumIndex == -1)
+            HeightGum = getFloatValue(htmlCode, "Высота десны, мм");
+            if(HeightGum == -1.0f)
             {
-                heightGumIndex = htmlCode.IndexOf("Высота, мм");
-
-                if(heightGumIndex != -1)
-                {
-                    float.TryParse(string.Concat(
-                        htmlCode.Substring(heightGumIndex)
-                            .SkipWhile(ch => ch != 'v')
-                            .Skip(7)
-                            .TakeWhile(ch => ch != '<')
-                        ).Replace(".", ","), out heightGum);
-                }
+                HeightGum = getFloatValue(htmlCode, "Высота, мм");
             }
-            HeightGum = heightGum;
+            
+            Platform = getStringValue(htmlCode, "Платформа");
 
-            Platform = string.Concat(
-                htmlCode.Substring(htmlCode.IndexOf("Платформа"))
-                    .SkipWhile(ch => ch != 'v')
-                    .Skip(7)
-                    .TakeWhile(ch => ch != '<')
-                );
+            Material = getStringValue(htmlCode, "Материал");
 
-            Material = string.Concat(
-                htmlCode.Substring(htmlCode.IndexOf("Материал"))
-                    .SkipWhile(ch => ch != 'v')
-                    .Skip(7)
-                    .TakeWhile(ch => ch != '<')
-                );
+            OrthopedSize = getFloatValue(htmlCode, "Размер ортопедической отвертки, мм");
 
-            float orthopedSize = 0.0f;
-            float.TryParse(string.Concat(
-                htmlCode.Substring(htmlCode.IndexOf("Размер ортопедической отвертки, мм"))
-                    .SkipWhile(ch => ch != 'v')
-                    .Skip(7)
-                    .TakeWhile(ch => ch != '<')
-                ).Replace(".", ","), out orthopedSize);
-            OrthopedSize = orthopedSize;
+            ImpressionLevel = getStringValue(htmlCode, "Уровень снятия оттиска");
 
-            ImpressionLevel = string.Concat(
-                htmlCode.Substring(htmlCode.IndexOf("Уровень снятия оттиска"))
-                    .SkipWhile(ch => ch != 'v')
-                    .Skip(7)
-                    .TakeWhile(ch => ch != '<')
-                );
-
-            ApplicationMethod = string.Concat(
-                htmlCode.Substring(htmlCode.IndexOf("Метод применения"))
-                    .SkipWhile(ch => ch != 'v')
-                    .Skip(7)
-                    .TakeWhile(ch => ch != '<')
-                );
+            ApplicationMethod = getStringValue(htmlCode, "Метод применения");
 
             return true;
+        }
+
+        private float getFloatValue(string htmlCode, string fieldTitle)
+        {
+            int valueIndex = htmlCode.IndexOf(fieldTitle);
+            float value = -1.0f;
+
+            if (valueIndex != -1)
+            {
+                float.TryParse(string.Concat(
+                    htmlCode.Substring(valueIndex)
+                        .SkipWhile(ch => ch != 'v')
+                        .Skip(7)
+                        .TakeWhile(ch => ch != '<')
+                    ).Replace(".", ","), out value);
+            }
+
+            return value;
+        }
+
+        private string getStringValue(string htmlCode, string fieldTitle)
+        {
+            int valueIndex = htmlCode.IndexOf(fieldTitle);
+            if(valueIndex != -1)
+            {
+                return string.Concat(
+                    htmlCode.Substring(valueIndex)
+                        .SkipWhile(ch => ch != 'v')
+                        .Skip(7)
+                        .TakeWhile(ch => ch != '<')
+                    );
+            }
+            return "";
         }
 
         public async Task<string> getPageContent(string pageHref)
