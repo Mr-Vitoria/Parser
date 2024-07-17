@@ -50,7 +50,10 @@ namespace Parser.Parsers.JDental
         private const string BASE_URL_SCREWS = "https://jdentalcare.ru/vinty";
 
         // Титановые основания и скан-маркеры
-        private const string BASE_URL_BASES_MARKERS = "https://jdentalcare.ru/titanovye-osnovaniya-i-skan-markery/";
+        private const string BASE_URL_BASES_MARKERS = "https://jdentalcare.ru/titanovye-osnovaniya-i-skan-markery";
+
+        // Pre-milled бланки
+        private const string BASE_URL_PRE_MILLED_FORMS = "https://jdentalcare.ru/titanovye-osnovaniya-i-skan-markery/";
 
 
         public async Task<JDentalBaseContainer> parseBaseCards(string baseUrl, string title)
@@ -129,6 +132,13 @@ namespace Parser.Parsers.JDental
         public async Task<JDentalBaseContainer> getBasesAndMarkers()
         {
             JDentalBaseContainer container = await parseBaseCards(BASE_URL_BASES_MARKERS, "Титановые основания и скан-маркеры");
+
+            return container;
+        }
+
+        public async Task<JDentalBaseContainer> getPreMilledForms()
+        {
+            JDentalBaseContainer container = await parseBaseCards(BASE_URL_PRE_MILLED_FORMS, "Pre-milled бланки");
 
             return container;
         }
