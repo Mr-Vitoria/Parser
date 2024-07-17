@@ -34,6 +34,9 @@ namespace Parser.Parsers.JDental
         private const string BASE_URL_SCREW_FIXING = "https://jdentalcare.ru/dlya-vintovoj-fiksacii";
         private const string BASE_URL_REMOVABLE_PROSTHETICS = "https://jdentalcare.ru/dlya-semnogo-protezirovaniya";
 
+        // Analog
+        private const string BASE_URL_ANALOG = "https://jdentalcare.ru/analogi/";
+
 
         public async Task<JDentalBaseContainer> parseBaseCards(string baseUrl, string title)
         {
@@ -85,6 +88,13 @@ namespace Parser.Parsers.JDental
             containers.Add(await parseBaseCards(BASE_URL_OCTA_ABATMENT, "Octa абатменты"));
 
             return containers;
+        }
+
+        public async Task<JDentalBaseContainer> getAnalogs()
+        {
+            JDentalBaseContainer container = await parseBaseCards(BASE_URL_ANALOG, "Аналоги");
+
+            return container;
         }
 
         public async Task<List<JDentalBaseContainer>> getOrthipedicComponents()
