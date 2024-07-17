@@ -33,6 +33,7 @@ LogWriter.WriteInfo("Парсинг страницы начат", ConsoleColor.R
 
 //List<JDentalImplantContainer> implantContainers = await parser.getImplantContainers();
 
+List<JDentalBaseContainer> suprastructures = await parser.getSuprastructures();
 await parser.parseCollections();
 
 LogWriter.WriteInfo("Парсинг страницы завершен", ConsoleColor.Green);

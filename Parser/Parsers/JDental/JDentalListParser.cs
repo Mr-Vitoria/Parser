@@ -1,13 +1,6 @@
-﻿using Parser.Factories;
-using Parser.Models;
-using Parser.Parsers.JDental.Factories;
+﻿using Parser.Parsers.JDental.Factories;
 using Parser.Parsers.JDental.Models;
 using PuppeteerSharp;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Parser.Parsers.JDental
 {
@@ -221,6 +214,24 @@ namespace Parser.Parsers.JDental
             return containers;
         }
 
+        public async Task<List<JDentalBaseContainer>> getSuprastructures()
+        {
+            List<JDentalBaseContainer> containers =
+            [
+                .. await getOrthipedicComponents(),
+                await getAnalogs(),
+                .. await getAbatments(),
+                await getShapers(),
+                await getTransfers(),
+                await getMultiUnits(),
+                await getScrews(),
+                await getBasesAndMarkers(),
+                await getPreMilledForms(),
+            ];
+
+            return containers;
+        }
+        
         public async Task<List<JDentalCollectionCard>> parseCollections()
         {
             JDentalCollectionFactory cardFactory = new JDentalCollectionFactory();
