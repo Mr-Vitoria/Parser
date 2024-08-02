@@ -10,6 +10,7 @@ namespace Parser.Parsers.JDental.WpSenders.Models
     {
         public string title { get; set; }
         public string status { get; set; }
+        public string[] categories { get; set; }
         public T fields { get; set; }
     }
 }

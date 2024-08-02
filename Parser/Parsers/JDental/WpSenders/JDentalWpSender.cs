@@ -13,6 +13,8 @@ using RestSharp.Authenticators;
 using System.ComponentModel;
 using System.Net.Http.Headers;
 using System.Net;
+using System.IO.Compression;
+using DocumentFormat.OpenXml.Vml;
 
 namespace Parser.Parsers.JDental.WpSenders
 {
@@ -105,6 +107,61 @@ namespace Parser.Parsers.JDental.WpSenders
             return true;
         }
 
+        public async Task<bool> sendSuprastructure(JDentalBaseContainer suprastructure)
+        {
+            try
+            {
+                for (int i = 0; i < suprastructure.cards.Count; i++)
+                {
+                    JDentalBaseCard card = suprastructure.cards[i];
+                    var options = new RestClientOptions(WP_URL)
+                    {
+                        Authenticator = new HttpBasicAuthenticator(USERNAME, PASSWORD)
+                    };
+                    var client = new RestClient(options);
+                    var request = new RestRequest("suprastructure");
+
+                    List<string> lineImplants = new List<string>();
+                    foreach (var lineImplant in card.LineImplant.Split(","))
+                    {
+                        lineImplants.Add(getImplantLineLabel(lineImplant));
+                    }
+
+                    request.AddJsonBody(new WpObjectSuprastructure<Suprastructure>
+                    {
+                        title = card.Title,
+                        status = "publish",
+                        categories = [suprastructure.Title],
+                        type_suprastructure = [getTypeSuprastructure(suprastructure.Title)],
+                        fields = new Suprastructure
+                        {
+                            articul = card.Articul,
+                            lineImplant = lineImplants.ToArray(),
+                            title = card.Title,
+                            price = card.Price,
+                            heightGum = card.HeightGum,
+                            diametr = card.Diametr,
+                            platform = card.Platform,
+                            material = card.Material,
+                            orthopedSize = card.OrthopedSize,
+                            image = await sendImageFromUrl(card.ImgUrl, "image_" + card.Articul),
+                            impressionLevel = card.ImpressionLevel,
+                            applicationMethod = card.ApplicationMethod,
+                            indications = card.Indications,
+                            connection = card.Connection
+                        }
+                    });
+                    await client.PostAsync(request);
+                }
+            }
+            catch (Exception ex)
+            {
+                LogWriter.WriteInfo(ex.Message);
+            }
+
+            return true;
+        }
+
         public async Task<int> sendImageFromUrl(string imageUrl, string title)
         {
             try
@@ -154,7 +211,7 @@ namespace Parser.Parsers.JDental.WpSenders
 
         private string getImplantLineLabel(string implantLine)
         {
-            switch (implantLine)
+            switch (implantLine.Trim())
             {
                 case "JDEvolution Plus":
                     return "8";
@@ -170,6 +227,57 @@ namespace Parser.Parsers.JDental.WpSenders
                     return "7";
                 case "JDZygoma":
                     return "9";
+                default:
+                    return "-1";
+            }
+        }
+
+        private string getTypeSuprastructure(string type)
+        {
+            switch (type.Trim())
+            {
+                case "Абатменты":
+                    return "29";
+                    case "EMI абатменты":
+                        return "43";
+                    case "OCTA абатменты":
+                        return "44";
+                    case "Временные абатменты":
+                        return "40";
+                    case "Стандартные абатменты":
+                        return "41";
+                    case "Шаровидные абатменты":
+                        return "42";
+                    case "Pre-milled бланки":
+                    return "35";
+
+                case "Аналоги":
+                    return "27";
+
+                case "Винты":
+                    return "33";
+
+                case "Ортопедические компоненты":
+                    return "28";
+                    case "Для винтовой фиксации":
+                        return "36";
+                    case "Для съемного протезирования":
+                        return "38";
+                    case "Заживляющие колпачки":
+                        return "39";
+
+                case "Мульти-юниты":
+                    return "32";
+
+                case "Титановые основания и скан-маркеры":
+                    return "34";
+
+                case "Трансферы":
+                    return "31";
+
+                case "Формирователи":
+                    return "30";
+
                 default:
                     return "-1";
             }
