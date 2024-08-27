@@ -36,21 +36,20 @@ JDentalListParser parser = new JDentalListParser();
 
 LogWriter.WriteInfo("Парсинг страницы начат", ConsoleColor.Red);
 
-//List<JDentalImplantContainer> implantContainers = await parser.getImplants();
+List<JDentalImplantContainer> implantContainers = await parser.getImplants();
 //List<JDentalCollectionCard> collections = await parser.getCollections();
 //List<JDentalBaseContainer> suprastructures = await parser.getSuprastructures();
-JDentalBaseContainer suprastructure = await parser.getAnalogs();
 
 LogWriter.WriteInfo("Парсинг страницы завершен", ConsoleColor.Green);
 
 LogWriter.WriteInfo("Отправка данных на Wordpress", ConsoleColor.Red);
 JDentalWpSender sender = new JDentalWpSender();
-//for (int i = 0; i < implantContainers.Count; i++)
-//{
-//    LogWriter.WriteInfo($"Контейнер {implantContainers[i].Title}", ConsoleColor.DarkMagenta);
+for (int i = 0; i < implantContainers.Count; i++)
+{
+    LogWriter.WriteInfo($"Контейнер {implantContainers[i].Title}", ConsoleColor.DarkMagenta);
 
-//    await sender.sendImplants(implantContainers[i]);
-//}
+    await sender.sendImplants(implantContainers[i]);
+}
 
 //for (int i = 0; i < collections.Count; i++)
 //{
@@ -68,6 +67,4 @@ JDentalWpSender sender = new JDentalWpSender();
 
 LogWriter.WriteInfo("Отправка данных на Wordpress закончена", ConsoleColor.Green);
 
-//List<JDentalBaseContainer> suprastructures = await parser.getSuprastructures();
-//await parser.parseCollections();
 #endregion

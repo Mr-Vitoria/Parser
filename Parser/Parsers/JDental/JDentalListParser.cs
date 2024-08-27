@@ -44,9 +44,9 @@ namespace Parser.Parsers.JDental
 
         // Титановые основания и скан-маркеры
         private const string BASE_URL_BASES_MARKERS = "https://jdentalcare.ru/titanovye-osnovaniya-i-skan-markery";
-
+        
         // Pre-milled бланки
-        private const string BASE_URL_PRE_MILLED_FORMS = "https://jdentalcare.ru/titanovye-osnovaniya-i-skan-markery/";
+        private const string BASE_URL_PRE_MILLED_FORMS = "https://jdentalcare.ru/pre-milled-blanki";
 
 
         public async Task<JDentalBaseContainer> parseBaseCards(string baseUrl, string title)

@@ -56,7 +56,7 @@ namespace Parser.Parsers.JDental.WpSenders
                             platform = card.Platform,
                             material = card.Material,
                             orthopedSize = card.OrthopedSize,
-                            image = await sendImageFromUrl(card.ImgUrl, "image_"+container.Title+"_"+i)
+                            image = await sendImageFromUrl(card.ImgUrl, "image_"+card.Articul)
                         }
                     });
                     await client.PostAsync(request);
@@ -166,6 +166,7 @@ namespace Parser.Parsers.JDental.WpSenders
         {
             try
             {
+                title = title;
                 using (WebClient client = new WebClient())
                 {
                     if (!Directory.Exists("temp"))
@@ -238,9 +239,9 @@ namespace Parser.Parsers.JDental.WpSenders
             {
                 case "Абатменты":
                     return "29";
-                    case "EMI абатменты":
+                    case "Emi абатменты":
                         return "43";
-                    case "OCTA абатменты":
+                    case "Octa абатменты":
                         return "44";
                     case "Временные абатменты":
                         return "40";

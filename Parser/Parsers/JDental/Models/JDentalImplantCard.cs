@@ -55,7 +55,7 @@ namespace Parser.Parsers.JDental.Models
                     .SkipWhile(ch => ch != '>')
                     .Skip(1)
                     .TakeWhile(ch => ch != '<')
-                );
+                ).Replace(":", "").Replace(".", "").Replace(",", "").Replace(";", "");
 
             string priceString = string.Concat(
                 htmlCard.Substring(htmlCard.IndexOf("\"price"))
