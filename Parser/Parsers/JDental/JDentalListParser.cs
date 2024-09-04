@@ -44,9 +44,9 @@ namespace Parser.Parsers.JDental
 
         // Титановые основания и скан-маркеры
         private const string BASE_URL_BASES_MARKERS = "https://jdentalcare.ru/titanovye-osnovaniya-i-skan-markery";
-
+        
         // Pre-milled бланки
-        private const string BASE_URL_PRE_MILLED_FORMS = "https://jdentalcare.ru/titanovye-osnovaniya-i-skan-markery/";
+        private const string BASE_URL_PRE_MILLED_FORMS = "https://jdentalcare.ru/pre-milled-blanki";
 
 
         public async Task<JDentalBaseContainer> parseBaseCards(string baseUrl, string title)
@@ -203,13 +203,13 @@ namespace Parser.Parsers.JDental
         public async Task<List<JDentalImplantContainer>> getImplants()
         {
             List<JDentalImplantContainer> containers = new List<JDentalImplantContainer>();
-            containers.Add( await parseImplant(BASE_URL_JDICON, "JDIcon"));
-            containers.Add( await parseImplant(BASE_URL_JDICON_PLUS, "JDIcon Plus"));
-            containers.Add( await parseImplant(BASE_URL_JDICON_ULTRA_S, "JDIcon Ultra S"));
-            containers.Add( await parseImplant(BASE_URL_JDNASAL, "JDNasal"));
-            containers.Add( await parseImplant(BASE_URL_JDPTERYGO, "JDPterygo"));
-            containers.Add( await parseImplant(BASE_URL_JDEVOLUTION_PLUS, "JDEvolution Plus"));
-            containers.Add( await parseImplant(BASE_URL_JDZYGOMA, "JDZygoma"));
+            containers.Add(await parseImplant(BASE_URL_JDICON, "JDIcon"));
+            containers.Add(await parseImplant(BASE_URL_JDICON_PLUS, "JDIcon Plus"));
+            containers.Add(await parseImplant(BASE_URL_JDICON_ULTRA_S, "JDIcon Ultra S"));
+            containers.Add(await parseImplant(BASE_URL_JDNASAL, "JDNasal"));
+            containers.Add(await parseImplant(BASE_URL_JDPTERYGO, "JDPterygo"));
+            containers.Add(await parseImplant(BASE_URL_JDEVOLUTION_PLUS, "JDEvolution Plus"));
+            containers.Add(await parseImplant(BASE_URL_JDZYGOMA, "JDZygoma"));
 
             return containers;
         }
@@ -232,7 +232,7 @@ namespace Parser.Parsers.JDental
             return containers;
         }
         
-        public async Task<List<JDentalCollectionCard>> parseCollections()
+        public async Task<List<JDentalCollectionCard>> getCollections()
         {
             JDentalCollectionFactory cardFactory = new JDentalCollectionFactory();
             List<JDentalCollectionCard> parsedCollections = new List<JDentalCollectionCard>();
@@ -289,5 +289,6 @@ namespace Parser.Parsers.JDental
 
             }
         }
+
     }
 }

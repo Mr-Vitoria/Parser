@@ -7,6 +7,8 @@ using Parser.Models;
 using Parser.Parsers;
 using Parser.Parsers.JDental;
 using Parser.Parsers.JDental.Models;
+using Parser.Parsers.JDental.WpSenders;
+using Parser.Parsers.JDental.WpSenders.Models;
 
 //GentlemenListHTMLParser parser = new GentlemenListHTMLParser(
 //    "https://www.gentlemens.kz/", 
@@ -27,13 +29,42 @@ using Parser.Parsers.JDental.Models;
 
 //LogWriter.WriteInfo("Завершено", ConsoleColor.Green);
 
+
+#region JDental
+
 JDentalListParser parser = new JDentalListParser();
 
 LogWriter.WriteInfo("Парсинг страницы начат", ConsoleColor.Red);
 
-//List<JDentalImplantContainer> implantContainers = await parser.getImplantContainers();
-
-List<JDentalBaseContainer> suprastructures = await parser.getSuprastructures();
-await parser.parseCollections();
+List<JDentalImplantContainer> implantContainers = await parser.getImplants();
+//List<JDentalCollectionCard> collections = await parser.getCollections();
+//List<JDentalBaseContainer> suprastructures = await parser.getSuprastructures();
 
 LogWriter.WriteInfo("Парсинг страницы завершен", ConsoleColor.Green);
+
+LogWriter.WriteInfo("Отправка данных на Wordpress", ConsoleColor.Red);
+JDentalWpSender sender = new JDentalWpSender();
+for (int i = 0; i < implantContainers.Count; i++)
+{
+    LogWriter.WriteInfo($"Контейнер {implantContainers[i].Title}", ConsoleColor.DarkMagenta);
+
+    await sender.sendImplants(implantContainers[i]);
+}
+
+//for (int i = 0; i < collections.Count; i++)
+//{
+//    LogWriter.WriteInfo($"Коллекция {collections[i].Title}", ConsoleColor.DarkMagenta);
+
+//    await sender.sendCollection(collections[i], i);
+//}
+
+//for (int i = 0; i < suprastructures.Count; i++)
+//{
+//    LogWriter.WriteInfo($"Супраструктура {suprastructures[i].Title}", ConsoleColor.DarkMagenta);
+
+//    await sender.sendSuprastructure(suprastructures[i]);
+//}
+
+LogWriter.WriteInfo("Отправка данных на Wordpress закончена", ConsoleColor.Green);
+
+#endregion
