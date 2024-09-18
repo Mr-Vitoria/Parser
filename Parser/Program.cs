@@ -5,6 +5,9 @@
 using Parser;
 using Parser.Models;
 using Parser.Parsers;
+using Parser.Parsers.Hamilton;
+using Parser.Parsers.Hamilton.Models;
+using Parser.Parsers.Hamilton.WpSenders;
 using Parser.Parsers.JDental;
 using Parser.Parsers.JDental.Models;
 using Parser.Parsers.JDental.WpSenders;
@@ -32,24 +35,24 @@ using Parser.Parsers.JDental.WpSenders.Models;
 
 #region JDental
 
-JDentalListParser parser = new JDentalListParser();
+//JDentalListParser parser = new JDentalListParser();
 
-LogWriter.WriteInfo("Парсинг страницы начат", ConsoleColor.Red);
+//LogWriter.WriteInfo("Парсинг страницы начат", ConsoleColor.Red);
 
-List<JDentalImplantContainer> implantContainers = await parser.getImplants();
-//List<JDentalCollectionCard> collections = await parser.getCollections();
-//List<JDentalBaseContainer> suprastructures = await parser.getSuprastructures();
+//List<JDentalImplantContainer> implantContainers = await parser.getImplants();
+////List<JDentalCollectionCard> collections = await parser.getCollections();
+////List<JDentalBaseContainer> suprastructures = await parser.getSuprastructures();
 
-LogWriter.WriteInfo("Парсинг страницы завершен", ConsoleColor.Green);
+//LogWriter.WriteInfo("Парсинг страницы завершен", ConsoleColor.Green);
 
-LogWriter.WriteInfo("Отправка данных на Wordpress", ConsoleColor.Red);
-JDentalWpSender sender = new JDentalWpSender();
-for (int i = 0; i < implantContainers.Count; i++)
-{
-    LogWriter.WriteInfo($"Контейнер {implantContainers[i].Title}", ConsoleColor.DarkMagenta);
+//LogWriter.WriteInfo("Отправка данных на Wordpress", ConsoleColor.Red);
+//JDentalWpSender sender = new JDentalWpSender();
+//for (int i = 0; i < implantContainers.Count; i++)
+//{
+//    LogWriter.WriteInfo($"Контейнер {implantContainers[i].Title}", ConsoleColor.DarkMagenta);
 
-    await sender.sendImplants(implantContainers[i]);
-}
+//    await sender.sendImplants(implantContainers[i]);
+//}
 
 //for (int i = 0; i < collections.Count; i++)
 //{
@@ -65,6 +68,22 @@ for (int i = 0; i < implantContainers.Count; i++)
 //    await sender.sendSuprastructure(suprastructures[i]);
 //}
 
-LogWriter.WriteInfo("Отправка данных на Wordpress закончена", ConsoleColor.Green);
+//LogWriter.WriteInfo("Отправка данных на Wordpress закончена", ConsoleColor.Green);
+
+#endregion
+
+
+
+#region Hamilton
+
+HamiltonParser parser = new HamiltonParser();
+
+List<HamiltonNewsCard> cards = await parser.getNewsCards();
+//List<HamiltonCaseCard> cards = await parser.getCaseCards();
+
+HamiltonWpSender sender = new HamiltonWpSender();
+
+await sender.sendNews(cards);
+//await sender.sendCases(cards);
 
 #endregion
